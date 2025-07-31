@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <!-- Title and Icon -->
+    <title id="title">Meetix, Free Video Calls, Messaging and Screen Sharing</title>
+    <link id="icon" rel="shortcut icon" href="../images/vite.svg" />
+    <link id="appleTouchIcon" rel="apple-touch-icon" href="../images/vite.svg" />
+
+    <!-- Meta Information -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      id="description"
+      name="description"
+      content="Heimat Talks SFU powered by WebRTC and mediasoup, Real-time Simple Secure Fast video calls, messaging and screen sharing capabilities in the browser."
+    />
+    <meta
+      id="keywords"
+      name="keywords"
+      content="webrtc, miro, mediasoup, mediasoup-client, self hosted, voip, sip, real-time communications, chat, messaging, meet, webrtc stun, webrtc turn, webrtc p2p, webrtc sfu, video meeting, video chat, video conference, multi video chat, multi video conference, peer to peer, p2p, sfu, rtc, alternative to, zoom, microsoft teams, google meet, jitsi, meeting"
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="{{OG_TYPE}}" />
+    <meta property="og:site_name" content="{{OG_SITE_NAME}}" />
+    <meta property="og:title" content="{{OG_TITLE}}" />
+    <meta property="og:description" content="{{OG_DESCRIPTION}}" />
+    <meta property="og:image" content="{{OG_IMAGE}}" />
+    <meta property="og:url" content="{{OG_URL}}" />
+
+    <!-- Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Other Styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/landing.css" />
+    <link rel="stylesheet" href="../css/Snow.css" />
+
+    <!-- Scripts -->
+    <script async src="../js/Snow.js"></script>
+    <script defer src="../js/Brand.js"></script>
+    <script async src="../js/Umami.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8"></script>
+    <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xss/dist/xss.min.js"></script>
+  </head>
+
+  <body class="is-boxed has-animations bg-black text-white">
+    <div id="snow-container"></div>
+    <div class="body-wrap">
+      <!-- 🌟 Static Meetix Header -->
+      <header class="flex justify-between items-center px-6 py-4 border-b border-gray-200 relative">
+        <div class="flex items-center">
+          <img src="video-camera.svg" style="width: 32px; height: 32px; filter: brightness(0) saturate(100%) invert(63%) sepia(78%) saturate(590%) hue-rotate(78deg);" />
+
+          <span class="ml-2 text-xl font-bold">Meetix</span>
+        </div>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center space-x-4">
+                   <a
+            href="https://meet.mahitechnocrafts.in/meetings/details"
+            class="bg-[#00FF40] hover:bg-[#00FF40] text-black px-4 py-2 rounded-3xl font-bold"
+          >
+            Go to Dashboard
+          </a>
+        </nav>
+
+        <!-- Mobile Hamburger -->
+        <button class="md:hidden" onclick="document.getElementById('sidebar').classList.remove('hidden')">
+          <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M3 6h14M3 10h14M3 14h14" />
+          </svg>
+        </button>
+
+
+        <!-- Mobile Sidebar -->
+        <div
+          id="sidebar"
+          class="hidden fixed top-0 right-0 max-w-[70%] h-full bg-white text-black shadow-lg z-50 p-6 flex flex-col"
+        >
+          <button class="self-end mb-4" onclick="document.getElementById('sidebar').classList.add('hidden')">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M6 6l8 8M6 14L14 6" />
+            </svg>
+          </button>
+          <a
+            href="/meetings/details"
+            class="bg-[#00FF40] hover:bg-[#00FF40] text-black px-4 py-2 rounded-md font-medium text-center"
+          >
+            Go to Dashboard
+          </a>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main>
+        <section class="hero reveal-from-bottom"></section>
+
+        <section class="cta section">
+          <div class="container">
+            <div class="cta-inner section-inner br-12">
+              <h3 id="joinDescription" class="section-title mt-0">
+                Pick a room name.<br />How about this one?
+              </h3>
+              <div>
+                <div class="mb-24">
+                  <label for="roomName"></label>
+                  <div class="form-group-desktop">
+                    <input
+                      id="roomName"
+                      class="form-input"
+                      type="text"
+                      maxlength="36"
+                      value=""
+                    />
+                    <button
+                      id="genRoomButton"
+                      class="button button-primary br-6 mr-8 mb-8 fas fa-arrows-rotate"
+                    ></button>
+                    <button id="joinRoomButton" class="button button-primary pulse">
+                      Join Room
+                    </button>
+                  </div>
+                </div>
+                <div id="lastRoomContainer" class="last-room">
+                  <span id="joinLastLabel">Your recent room:</span>
+                  <a id="lastRoom"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <br /><br />
+      </main>
+
+      <footer style="background: linear-gradient(to top right, black, #2F4F29); border-top: 1px solid #e5e7eb;">
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-white">
+      <!-- Branding -->
+      <div>
+        <a href="/">
+          <h3 class="text-lg font-semibold mb-4 flex items-center">
+            <img src="../images/video-icon.svg" alt="icon" class="h-6 w-6 text-[#00FF40] mr-2" />
+            Meetix
+          </h3>
+        </a>
+        <p class="mb-4">Bringing people together through seamless video communication.</p>
+        <div class="flex space-x-4">
+          <a href="#" class="hover:text-blue-600" aria-label="Facebook">
+            <i class="fab fa-facebook h-6 w-6"></i>
+          </a>
+          <a href="#" class="hover:text-blue-600" aria-label="Twitter">
+            <i class="fab fa-twitter h-6 w-6"></i>
+          </a>
+          <a href="#" class="hover:text-blue-600" aria-label="LinkedIn">
+            <i class="fab fa-linkedin h-6 w-6"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Features</h3>
+        <ul class="space-y-2">
+          <li><a href="/screen-sharing" class="hover:text-blue-600">Screen Sharing</a></li>
+          <li><a href="/recordings-page" class="hover:text-blue-600">Recording</a></li>
+          <li><a href="/virtual-background" class="hover:text-blue-600">Virtual Background</a></li>
+          <li><a href="/live-captions" class="hover:text-blue-600">Live Captions</a></li>
+          <li><a href="/breakout-rooms" class="hover:text-blue-600">Breakout Rooms</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Resources</h3>
+        <ul class="space-y-2">
+          <li><a href="/help-center" class="hover:text-blue-600">Help Center</a></li>
+          <li><a href="/community" class="hover:text-blue-600">Community</a></li>
+          <li><a href="/webinars" class="hover:text-blue-600">Webinars</a></li>
+          <li><a href="/tutorials" class="hover:text-blue-600">Tutorials</a></li>
+          <li><a href="/blogs" class="hover:text-blue-600">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Company</h3>
+        <ul class="space-y-2">
+          <li><a href="/about-us" class="hover:text-blue-600">About Us</a></li>
+          <li><a href="/careers" class="hover:text-blue-600">Careers</a></li>
+          <li><a href="/privacy-policy" class="hover:text-blue-600">Privacy Policy</a></li>
+          <li><a href="/terms-of-service" class="hover:text-blue-600">Terms of Service</a></li>
+          <li><a href="/contact" class="hover:text-blue-600">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer bottom -->
+    <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center text-white">
+      <div class="flex items-center mb-4 md:mb-0">
+        <i class="fas fa-mobile-alt text-white mr-2"></i>
+        <span>Download our mobile app</span>
+      </div>
+      <div class="flex space-x-4 mb-4 md:mb-0">
+        <a href="/privacy-policy" class="hover:text-blue-600">Privacy</a>
+        <a href="/terms-of-service" class="hover:text-blue-600">Terms</a>
+      </div>
+      <p class="mt-4 md:mt-0 text-sm">© 2025 Meetix. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script defer src="../js/Utils.js"></script>
+    <script defer src="../js/Common.js"></script>
+    <script defer src="../js/Landing.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <!-- Toggle Dropdown -->
+    <script>
+      const toggleBtn = document.getElementById('meet-toggle');
+      const dropdown = document.getElementById('meet-dropdown');
+
+      toggleBtn.addEventListener('click', () => {
+        dropdown.classList.toggle('hidden');
+      });
+
+      window.addEventListener('click', function (e) {
+        if (!toggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.add('hidden');
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,226 @@
+/* Base styles */
+.room_container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-color: #242120;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.video-content-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #202124;
+}
+
+/* Right sidebar styles */
+.right-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 350px;
+    height: 100%;
+    background-color: #2f3034;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-sidebar.open {
+    right: 0;
+}
+
+.sidebar-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.panel-header {
+    padding: 16px;
+    border-bottom: 1px solid #3c4043;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-panel-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+/* Control bar styles */
+.control-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top:10;
+    height: 56px;
+    background-color: #2f3034;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 10;
+}
+
+.control-bar-left,
+.control-bar-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.control-bar-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+.control-button {
+    background-color: #3c4043;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: 0 8px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.control-button:hover {
+    background-color: #4a4d51;
+}
+
+.control-button.active {
+    background-color: #5f6368;
+}
+
+/* Modal styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.share-modal {
+    background-color: #2f3034;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.room-id-display {
+    background-color: #3c4043;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 12px 0;
+    font-family: monospace;
+    word-break: break-all;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .right-sidebar {
+        width: 280px;
+    }
+
+    .control-bar {
+        height: 60px;
+        padding: 0 8px;
+    }
+
+    .control-button {
+        width: 36px;
+        height: 36px;
+        margin: 0 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .right-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+
+    .control-bar {
+        justify-content: center;
+    }
+
+    .control-bar-left,
+    .control-bar-right {
+        display: none;
+    }
+}
+
+.video_buttons_container {
+    display: flex;
+    gap: 1px;
+    /* Reduced gap between buttons */
+}
+
+
+/* Example Message Component Styles */
+.message {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    /* No box, simple padding */
+    margin-bottom: 2px;
+    /* Space between messages */
+    background-color: transparent;
+    /* No background box */
+    border-radius: 8px;
+    /* Optional rounded corners */
+}
+
+.message__author {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.message__content {
+    font-size: 14px;
+    color: #333;
+}
