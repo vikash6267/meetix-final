@@ -68,19 +68,27 @@
       <!-- 🌟 Static Meetix Header -->
       <header class="flex justify-between items-center px-6 py-4 border-b border-gray-200 relative">
         <div class="flex items-center">
-          <img src="video-camera.svg" style="width: 32px; height: 32px; filter: brightness(0) saturate(100%) invert(63%) sepia(78%) saturate(590%) hue-rotate(78deg);" />
+<i className="fa fa-video-camera text-[#00FF40] mr-2"></i>
 
           <span class="ml-2 text-xl font-bold">Meetix</span>
         </div>
 
         <!-- Desktop Nav -->
         <nav class="hidden md:flex items-center space-x-4">
-                   <a
-            href="https://meet.mahitechnocrafts.in/meetings/details"
-            class="bg-[#00FF40] hover:bg-[#00FF40] text-black px-4 py-2 rounded-3xl font-bold"
-          >
-            Go to Dashboard
-          </a>
+                   <a 
+  href="https://meet.mahitechnocrafts.in/meetings/details"
+  style="
+    background-color: #00FF40; 
+    color: black; 
+    padding: 0.5rem 1rem; 
+    border-radius: 1.5rem; 
+    font-weight: bold; 
+    text-decoration: none;
+  "
+>
+  Go to Dashboard
+</a>
+
         </nav>
 
         <!-- Mobile Hamburger -->
@@ -151,79 +159,80 @@
         <br /><br />
       </main>
 
-      <footer style="background: linear-gradient(to top right, black, #2F4F29); border-top: 1px solid #e5e7eb;">
-  <div class="container mx-auto px-4 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-white">
+      <footer style="background: linear-gradient(to top right, black, #9333ea); border-top: 1px solid #e5e7eb; color: white; padding: 3rem 1rem;">
+  <div style="max-width: 1200px; margin: auto;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+      
       <!-- Branding -->
       <div>
-        <a href="/">
-          <h3 class="text-lg font-semibold mb-4 flex items-center">
-            <img src="../images/video-icon.svg" alt="icon" class="h-6 w-6 text-[#00FF40] mr-2" />
+        <a href="/" style="text-decoration: none; color: white;">
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center;">
+            <i class="fa fa-video-camera" style="color: #00FF40; margin-right: 0.5rem;"></i>
             Meetix
           </h3>
         </a>
-        <p class="mb-4">Bringing people together through seamless video communication.</p>
-        <div class="flex space-x-4">
-          <a href="#" class="hover:text-blue-600" aria-label="Facebook">
-            <i class="fab fa-facebook h-6 w-6"></i>
+        <p style="margin-bottom: 1rem;">Bringing people together through seamless video communication.</p>
+        <div style="display: flex; gap: 1rem;">
+          <a href="#" style="color: white; text-decoration: none;" aria-label="Facebook">
+            <i class="fab fa-facebook" style="font-size: 1.5rem;"></i>
           </a>
-          <a href="#" class="hover:text-blue-600" aria-label="Twitter">
-            <i class="fab fa-twitter h-6 w-6"></i>
+          <a href="#" style="color: white; text-decoration: none;" aria-label="Twitter">
+            <i class="fab fa-twitter" style="font-size: 1.5rem;"></i>
           </a>
-          <a href="#" class="hover:text-blue-600" aria-label="LinkedIn">
-            <i class="fab fa-linkedin h-6 w-6"></i>
+          <a href="#" style="color: white; text-decoration: none;" aria-label="LinkedIn">
+            <i class="fab fa-linkedin" style="font-size: 1.5rem;"></i>
           </a>
         </div>
       </div>
 
       <!-- Features -->
       <div>
-        <h3 class="text-lg font-semibold mb-4">Features</h3>
-        <ul class="space-y-2">
-          <li><a href="/screen-sharing" class="hover:text-blue-600">Screen Sharing</a></li>
-          <li><a href="/recordings-page" class="hover:text-blue-600">Recording</a></li>
-          <li><a href="/virtual-background" class="hover:text-blue-600">Virtual Background</a></li>
-          <li><a href="/live-captions" class="hover:text-blue-600">Live Captions</a></li>
-          <li><a href="/breakout-rooms" class="hover:text-blue-600">Breakout Rooms</a></li>
+        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Features</h3>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="margin-bottom: 0.5rem;"><a href="/screen-sharing" style="color: white; text-decoration: none;">Screen Sharing</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/recordings-page" style="color: white; text-decoration: none;">Recording</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/virtual-background" style="color: white; text-decoration: none;">Virtual Background</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/live-captions" style="color: white; text-decoration: none;">Live Captions</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/breakout-rooms" style="color: white; text-decoration: none;">Breakout Rooms</a></li>
         </ul>
       </div>
 
       <!-- Resources -->
       <div>
-        <h3 class="text-lg font-semibold mb-4">Resources</h3>
-        <ul class="space-y-2">
-          <li><a href="/help-center" class="hover:text-blue-600">Help Center</a></li>
-          <li><a href="/community" class="hover:text-blue-600">Community</a></li>
-          <li><a href="/webinars" class="hover:text-blue-600">Webinars</a></li>
-          <li><a href="/tutorials" class="hover:text-blue-600">Tutorials</a></li>
-          <li><a href="/blogs" class="hover:text-blue-600">Blog</a></li>
+        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Resources</h3>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="margin-bottom: 0.5rem;"><a href="/help-center" style="color: white; text-decoration: none;">Help Center</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/community" style="color: white; text-decoration: none;">Community</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/webinars" style="color: white; text-decoration: none;">Webinars</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/tutorials" style="color: white; text-decoration: none;">Tutorials</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/blogs" style="color: white; text-decoration: none;">Blog</a></li>
         </ul>
       </div>
 
       <!-- Company -->
       <div>
-        <h3 class="text-lg font-semibold mb-4">Company</h3>
-        <ul class="space-y-2">
-          <li><a href="/about-us" class="hover:text-blue-600">About Us</a></li>
-          <li><a href="/careers" class="hover:text-blue-600">Careers</a></li>
-          <li><a href="/privacy-policy" class="hover:text-blue-600">Privacy Policy</a></li>
-          <li><a href="/terms-of-service" class="hover:text-blue-600">Terms of Service</a></li>
-          <li><a href="/contact" class="hover:text-blue-600">Contact Us</a></li>
+        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Company</h3>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="margin-bottom: 0.5rem;"><a href="/about-us" style="color: white; text-decoration: none;">About Us</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/careers" style="color: white; text-decoration: none;">Careers</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/privacy-policy" style="color: white; text-decoration: none;">Privacy Policy</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/terms-of-service" style="color: white; text-decoration: none;">Terms of Service</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="/contact" style="color: white; text-decoration: none;">Contact Us</a></li>
         </ul>
       </div>
     </div>
 
     <!-- Footer bottom -->
-    <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center text-white">
-      <div class="flex items-center mb-4 md:mb-0">
-        <i class="fas fa-mobile-alt text-white mr-2"></i>
+    <div style="border-top: 1px solid #e5e7eb; padding-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+      <div style="display: flex; align-items: center;">
+        <i class="fas fa-mobile-alt" style="margin-right: 0.5rem;"></i>
         <span>Download our mobile app</span>
       </div>
-      <div class="flex space-x-4 mb-4 md:mb-0">
-        <a href="/privacy-policy" class="hover:text-blue-600">Privacy</a>
-        <a href="/terms-of-service" class="hover:text-blue-600">Terms</a>
+      <div style="display: flex; gap: 1rem;">
+        <a href="/privacy-policy" style="color: white; text-decoration: none;">Privacy</a>
+        <a href="/terms-of-service" style="color: white; text-decoration: none;">Terms</a>
       </div>
-      <p class="mt-4 md:mt-0 text-sm">© 2025 Meetix. All rights reserved.</p>
+      <p style="font-size: 0.875rem; margin: 0;">© 2025 Meetix. All rights reserved.</p>
     </div>
   </div>
 </footer>

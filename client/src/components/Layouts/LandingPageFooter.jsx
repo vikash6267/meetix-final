@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const LandingPageFooter = () => {
     return (
-        <footer className="bg-gradient-to-tr from-black to-[#2F4F29] border-t border-gray-200">
+        <footer className="bg-gradient-to-tr from-black to-[#9333ea] border-t border-gray-200">
             <div className="container mx-auto px-4 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                     <div>

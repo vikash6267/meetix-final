@@ -120,9 +120,9 @@ const LandingPageHeader = () => {
                     </button>}
                     {isMeetDropdownOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200">
-                            <div className="px-4 py-2">
+                            <div>
                                 {/* <ConnectButton > */}
-                                <button onClick={handleMeetingAction} className="w-full text-black px-4 py-2 font-medium mb-2 text-center">
+                                <button onClick={handleMeetingAction} className="w-full text-black font-medium mb-2 text-center">
                                     Create Meeting
                                 </button>
                                 {/* <button onClick={handleJoinButton} className="w-full text-black px-4 py-2 font-medium mb-2 text-center">
@@ -186,7 +186,7 @@ const LandingPageHeader = () => {
                         <XMarkIcon className="h-6 w-6" />
                     </button>
                     {/* <ConnectButton className="mb-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium"> */}
-                    <button onClick={handleMeetingAction} className="w-full text-black px-4 py-2 font-medium mb-2 text-center">
+                    <button onClick={handleMeetingAction} className="w-full text-black font-medium mb-2 text-center">
                         Create Meeting
                     </button>
                     {/* </ConnectButton> */}
@@ -194,7 +194,7 @@ const LandingPageHeader = () => {
                         isJoinBtn
                         className="mb-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium"
                     > */}
-                    <button onClick={handleMeetingAction} className="w-full text-black px-4 py-2 font-medium mb-2 text-center">
+                    <button onClick={handleMeetingAction} className="w-full text-black font-medium mb-2 text-center">
                         Join Meeting
                     </button>
                     {/* </ConnectButton> */}
