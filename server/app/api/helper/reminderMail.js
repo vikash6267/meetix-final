@@ -66,7 +66,7 @@ const reminderMeetingTemplate = ({ meetingName, scheduleDateTime, shortSummary, 
             : ""
         }
 
-        <a class="btn" href="http://localhost:3010/join/?room=${roomId}">
+        <a class="btn" href="https://meetix.mahitechnocrafts.in/join/?room=${roomId}">
           🔗 Join Meeting
         </a>
 

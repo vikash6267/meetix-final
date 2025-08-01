@@ -1229,7 +1229,7 @@ async processSilentRecording() {
         console.log("⬆️ Uploading silent recording to server...");
 
         // 🌍 Fetch API से server को भेजो
-        const response = await fetch("http://localhost:3010/save-silent-recording", {
+        const response = await fetch("https://meetix.mahitechnocrafts.in/save-silent-recording", {
             method: "POST",
             body: formData
         });

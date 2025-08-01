@@ -5,7 +5,7 @@ import axios from 'axios';
 function MeetingCheck() {
   const { id: roomId, userId } = useParams();
   const navigate = useNavigate();
-  const BASE_URL = 'http://localhost:3010/api/v1';
+  const BASE_URL = 'https://meetix.mahitechnocrafts.in/api/v1';
 
   const [isJoined, setIsJoined] = useState(null); // null = loading
   const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ function MeetingCheck() {
       const joined = response.data.isJoined;
 
       if (joined) {
-        window.location.href = `http://localhost:3010/join/?room=${roomId}`;
+        window.location.href = `https://meetix.mahitechnocrafts.in/join/?room=${roomId}`;
       } else {
         setIsJoined(false);
       }

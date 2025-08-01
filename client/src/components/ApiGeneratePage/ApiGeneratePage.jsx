@@ -15,7 +15,7 @@ const MeetixEmbedIntegrationDocs = () => {
   const generateToken = async () => {
     setCopied(false);
     try {
-      const res = await fetch("http://localhost:3010/api/v1/user/generate-token", {
+      const res = await fetch("https://meetix.mahitechnocrafts.in/api/v1/user/generate-token", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: "from-server" })

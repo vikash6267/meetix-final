@@ -6394,7 +6394,7 @@ class RoomClient {
                 if (data.fileUrl) {
                     console.log('Video uploaded successfully! File URL:', data.fileUrl);
                     // You can handle the file URL here, like displaying it in the UI or saving it
-                    fetch('http://localhost:3010/api/v1/user/save-recording', {
+                    fetch('https://meetix.mahitechnocrafts.in/api/v1/user/save-recording', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

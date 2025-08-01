@@ -62,7 +62,7 @@ const meetingTemplate = ({ type, meetingName, scheduleDateTime, shortSummary, ro
         <p class="title">Meeting ${actionText} - ${meetingName}</p>
         <p class="subtitle">Scheduled at: <strong>${new Date(scheduleDateTime).toLocaleString()}</strong></p>
         ${shortSummary ? `<div class="summary"><strong>Summary:</strong><br/>${shortSummary}</div>` : ''}
-        ${showCTA ? `<a class="btn" href="http://localhost:3010/join/?room=${roomId}">Join Meeting</a>` : ''}
+        ${showCTA ? `<a class="btn" href="https://meetix.mahitechnocrafts.in/join/?room=${roomId}">Join Meeting</a>` : ''}
         <div class="footer">
       
         </div>

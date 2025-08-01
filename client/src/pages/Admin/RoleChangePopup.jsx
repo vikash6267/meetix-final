@@ -17,7 +17,7 @@ const RoleChangePopup = ({ selectedUser, setSelectedUser }) => {
   const handleSendOTP = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3010/api/v1/user/request-role-change-otp", {
+      const res = await axios.post("https://meetix.mahitechnocrafts.in/api/v1/user/request-role-change-otp", {
         email: adminEmail,
         userId: selectedUser._id,
         role: newRole,
@@ -36,7 +36,7 @@ const RoleChangePopup = ({ selectedUser, setSelectedUser }) => {
   const handleVerifyAndChange = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3010/api/v1/user/verify-role-change-otp", {
+      const res = await axios.post("https://meetix.mahitechnocrafts.in/api/v1/user/verify-role-change-otp", {
         email: adminEmail,
         otp,
         userId: selectedUser._id,

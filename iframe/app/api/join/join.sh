@@ -4,7 +4,7 @@
 API_KEY_SECRET="mirotalksfu_default_secret"
 MIROTALK_URL="https://sfu.mirotalk.com/api/v1/join"
 # Alternative URL for local testing:
-# MIROTALK_URL="http://localhost:3010/api/v1/join"
+# MIROTALK_URL="https://meetix.mahitechnocrafts.in/api/v1/join"
 
 # Request data with proper JSON formatting
 REQUEST_DATA='{

@@ -3053,7 +3053,7 @@ function startServer() {
 
 
 
-            fetch('http://localhost:3010/api/v1/user/messagePush', {
+            fetch('https://meetix.mahitechnocrafts.in/api/v1/user/messagePush', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

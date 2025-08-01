@@ -52,7 +52,7 @@ useEffect(() => {
       
 
         // Call API to get the latest profile
-        fetch(`http://localhost:3010/api/v1/user/myprofile/${parsedUser._id}`)
+        fetch(`https://meetix.mahitechnocrafts.in/api/v1/user/myprofile/${parsedUser._id}`)
           .then((res) => res.json())
           .then((data) => {
             setUserInfo({
@@ -102,7 +102,7 @@ console.log(storedUser)
     try {
       const parsedUser = JSON.parse(storedUser);
       const res = await axios.put(
-        `http://localhost:3010/api/v1/user/update-profile`,
+        `https://meetix.mahitechnocrafts.in/api/v1/user/update-profile`,
         {
           userId: parsedUser?._id || parsedUser?.id,
           ...userInfo
@@ -159,7 +159,7 @@ console.log(storedUser)
       }
 
       const response = await axios.post(
-        "http://localhost:3010/user/api/v1/change-password",
+        "https://meetix.mahitechnocrafts.in/user/api/v1/change-password",
         {
           userId,
           currentPassword,

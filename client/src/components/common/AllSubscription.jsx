@@ -16,7 +16,7 @@ const AllSubscriptions = () => {
     const fetchPlans = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:3010/api/v1/subscription/all",
+          "https://meetix.mahitechnocrafts.in/api/v1/subscription/all",
           {
             headers: { Authorization: `Bearer ${token}` }
           }
@@ -31,7 +31,7 @@ const AllSubscriptions = () => {
     const fetchUserPlans = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3010/api/v1/subscription/my-subscriptions",
+          "https://meetix.mahitechnocrafts.in/api/v1/subscription/my-subscriptions",
           { token },
           {
             headers: {
@@ -74,7 +74,7 @@ const AllSubscriptions = () => {
     console.log("📦 Creating subscription for plan:", plan);
 
     const response = await axios.post(
-      "http://localhost:3010/api/v1/subscription/create",
+      "https://meetix.mahitechnocrafts.in/api/v1/subscription/create",
       {
         subscriptionId: plan._id,
         redirectUrl: `https://www.mahitechnocrafts.in/payment-success?subscriptionId=${plan._id}`,

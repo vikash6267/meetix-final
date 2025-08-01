@@ -441,7 +441,7 @@ const UpcomingMeetingPage = () => {
                       ) : (
                         <>
                           <a
-                            href={`http://localhost:3010/join/?room=${meeting?.roomId}&id=${user?._id}`}
+                            href={`https://meetix.mahitechnocrafts.in/join/?room=${meeting?.roomId}&id=${user?._id}`}
                             className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 font-medium"
                           >
                             <Video size={18} />

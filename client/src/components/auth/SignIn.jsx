@@ -249,7 +249,7 @@ const SignIn = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3010/login', {
+      const response = await fetch('https://meetix.mahitechnocrafts.in/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
