@@ -118,7 +118,7 @@ module.exports = {
          * - hostUrl: Public URL (e.g., 'https://yourdomain.com')
          * - listen: IP and port to bind to
          */
-        hostUrl: process.env.SERVER_HOST_URL || 'http://localhost:3010',
+        hostUrl: process.env.SERVER_HOST_URL || 'https://meetix.mahitechnocrafts.in',
         listen: {
             ip: process.env.SERVER_LISTEN_IP || '0.0.0.0',
             port: process.env.SERVER_LISTEN_PORT || 3010,

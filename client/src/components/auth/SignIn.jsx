@@ -349,7 +349,7 @@ const SignIn = () => {
 
               <button>
                 <Link
-                  to={`http://localhost:3010?id=${user?._id}`}
+                  to={`https://meetix.mahitechnocrafts.in?id=${user?._id}`}
                   target="_blank"
                   className="inline-flex mt-6 items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-200"
                 >

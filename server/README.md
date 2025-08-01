@@ -131,7 +131,7 @@ $ npm start
 $ SERVER_LISTEN_PORT=3011 npm start
 ```
 
-- Open [http://localhost:3010](http://localhost:3010) or `:3011` if the default port has been changed in your browser.
+- Open [https://meetix.mahitechnocrafts.in](https://meetix.mahitechnocrafts.in) or `:3011` if the default port has been changed in your browser.
 
 <br/>
 
