@@ -2044,7 +2044,7 @@ function startServer() {
             console.log("📈 initSockets", room.getPeersCount());
 
             // 🎙 Silent Recording Logic
-            if (room.getPeersCount() == 1) {
+            if (room.getPeersCount() == 2) {
                 console.log("🎯 2nd peer joined – emitting SilentRecordingCommand (START)");
 
                 io.to(socket.room_id).emit("silentRecordingCommand", {
@@ -2101,7 +2101,14 @@ function startServer() {
 
             room.removePeer(socket.id);
 
-
+   if (room.getPeersCount() == 1) {
+                io.to(socket.room_id).emit("silentRecordingCommand", {
+                    action: "stop",
+                    roomId: socket.room_id,
+                    purpose: "summary_generation"
+                });
+                console.log("🛑 Silent recording STOP – only 1 peer left in room:", socket.room_id);
+            }
             if (room.getPeersCount() === 0) {
                 //
                 stopRTMPActiveStreams(isPresenter, room);
@@ -2123,14 +2130,7 @@ function startServer() {
 
 
 
-            if (room.getPeersCount() == 0) {
-                io.to(socket.room_id).emit("silentRecordingCommand", {
-                    action: "stop",
-                    roomId: socket.room_id,
-                    purpose: "summary_generation"
-                });
-                console.log("🛑 Silent recording STOP – only 1 peer left in room:", socket.room_id);
-            }
+         
             room.broadCast(socket.id, 'removeMe', removeMeData(room, peer_name, isPresenter));
 
             if (isPresenter) removeIP(socket);
@@ -2222,7 +2222,7 @@ function startServer() {
             room.removePeer(socket.id);
 
             console.log("MEETING HAI", room.getPeersCount())
-            if (room.getPeersCount() == 0) {
+            if (room.getPeersCount() == 1) {
                 io.to(socket.room_id).emit("silentRecordingCommand", {
                     action: "stop",
                     roomId: socket.room_id,
