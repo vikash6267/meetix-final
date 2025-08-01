@@ -335,7 +335,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </Link>
         </li> */}
 
-        {user && user.isAdmin && (
+        {user && user.isAdmin === "true" && (
           <>
             <li className="pt-4 mt-4 border-t border-[#2F4F29]">
               <span className="text-xs font-semibold text-white uppercase tracking-wider pl-3">
