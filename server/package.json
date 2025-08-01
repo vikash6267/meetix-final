@@ -6,7 +6,7 @@
     "scripts": {
         "test": "mocha tests/*.js",
         "start": "node app/src/app.js",
-        "start-dev": "nodemon app/src/Server.js",
+        "start-dev": "nodemon app/src/app.js",
         "debug": "DEBUG='mediasoup*' node app/src/Server.js",
         "compile": "npx webpack",
         "lint": "npx prettier --write .",
