@@ -102,18 +102,29 @@ export const getActivityMeetings = async (userId, token) => {
 
 
 
-export const getUserMeetings = async (userId, token) => {
+export const getUserMeetings = async (userId, token, page = 1) => {
   const toastId = toast.loading("Fetching your meetings...");
-  let meetings = [];
+  let data = { meetings: [], totalMeetings: 0, currentPage: 1, totalPages: 1 };
 
   try {
-    const response = await apiConnector("GET", `${GET_USER_MEETINGS}/${userId}`, null, {
-      Authorization: `Bearer ${token}`,
-    });
+    // ✅ page query param add
+    const response = await apiConnector(
+      "GET",
+      `${GET_USER_MEETINGS}/${userId}?page=${page}`,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
 
     if (response?.data?.success) {
-      meetings = response.data.meetings;
-      toast.success("Meetings fetched successfully");
+      data = {
+        meetings: response.data.meetings,
+        totalMeetings: response.data.totalMeetings,
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages,
+      };
+      
     } else {
       toast.error("Could not fetch meetings");
     }
@@ -123,8 +134,9 @@ export const getUserMeetings = async (userId, token) => {
   }
 
   toast.dismiss(toastId);
-  return meetings;
+  return data;  // ✅ ab meetings ke sath pagination info bhi milega
 };
+
 
 export const getRoomDetails = async (roomId, token) => {
   const toastId = toast.loading("Fetching room details...");

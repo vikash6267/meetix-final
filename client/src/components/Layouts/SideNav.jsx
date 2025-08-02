@@ -301,7 +301,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </Link>
             </li>
           
-            <li>
+            {/* <li>
               <Link
                 to="/developers/integration-guide"
                 className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${
@@ -313,7 +313,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 <FaVideo className="mr-2 text-xs" />
                 <span>Integration Guide</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
         )}
 

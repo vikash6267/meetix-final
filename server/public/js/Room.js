@@ -1124,18 +1124,6 @@ async function whoAreYou() {
         console.error('04 ----> AXIOS GET CONFIG ERROR', error.message);
     }
 
-    if (navigator.getDisplayMedia || navigator.mediaDevices.getDisplayMedia) {
-        BUTTONS.main.startScreenButton && show(initStartScreenButton);
-    }
-
-    if (isMediaStreamTrackAndTransformerSupported &&
-        (BUTTONS.settings.virtualBackground !== undefined
-            ? BUTTONS.settings.virtualBackground
-            : true)) {
-        show(initVirtualBackgroundButton);
-        show(videoVirtualBackground);
-    }
-
     // ✅ Already have details → skip popup
     if (peer_name && peer_email) {
         hide(loadingDiv);
@@ -1145,81 +1133,160 @@ async function whoAreYou() {
         return;
     }
 
-    // ✅ Load defaults from storage
+    // ✅ Load defaults
     let default_name = window.localStorage.peer_name || getCookie(room_id + '_name') || '';
     let default_email = window.localStorage.peer_email || getCookie(room_id + '_email') || '';
-
-    if (!BUTTONS.main.startVideoButton) {
-        isVideoAllowed = false;
-        elemDisplay('initVideo', false);
-        elemDisplay('initVideoButton', false);
-        elemDisplay('initAudioVideoButton', false);
-        elemDisplay('initVideoAudioRefreshButton', false);
-        elemDisplay('initVideoSelect', false);
-        elemDisplay('tabVideoDevicesBtn', false);
-        initVideoContainerShow(false);
-    }
-    if (!BUTTONS.main.startAudioButton) {
-        isAudioAllowed = false;
-        elemDisplay('initAudioButton', false);
-        elemDisplay('initAudioVideoButton', false);
-        elemDisplay('initVideoAudioRefreshButton', false);
-        elemDisplay('initMicrophoneSelect', false);
-        elemDisplay('initSpeakerSelect', false);
-        elemDisplay('tabAudioDevicesBtn', false);
-    }
-    if (!BUTTONS.main.startScreenButton) {
-        hide(initStartScreenButton);
-    }
-
-    // ✅ Profile check for force name/email
-    let force_peer_name = false;
-    try {
-        const { data: profile } = await axios.get('/profile', { timeout: 5000 });
-        if (profile) {
-            console.log('AXIOS GET OIDC Profile retrieved successfully', profile);
-            const peerNamePreference = profile.peer_name || {};
-            default_name = (peerNamePreference.name && profile.name) || default_name;
-            default_email = (peerNamePreference.email && profile.email) || default_email;
-
-            if (default_name && peerNamePreference.force) {
-                window.localStorage.peer_name = default_name;
-                window.localStorage.peer_email = default_email;
-                force_peer_name = true;
-            }
-        }
-    } catch (error) {
-        console.error('AXIOS OIDC Error fetching profile', error.message || error);
-    }
-
-    initUser.classList.toggle('hidden');
 
     Swal.fire({
         allowOutsideClick: false,
         allowEscapeKey: false,
         background: swalBackground,
         title: BRAND.app?.name,
+        width: 540,
         html: `
-            <div>
-                <input id="swal-name" class="swal2-input" placeholder="Enter your name" maxlength="32">
-                <input id="swal-email" class="swal2-input" placeholder="Enter your email" type="email">
-            </div>
-        `,
-        confirmButtonText: `Join meeting`,
+        <style>
+            .swal-icon-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+                border-radius: 50%;
+                border: none;
+                color: white;
+                margin: 10px;
+                cursor: pointer;
+            }
+            .swal2-select {
+                width: 100%;
+                padding: 8px;
+                margin: 5px 0;
+                border-radius: 6px;
+                background-color: #2c2c2c;
+                color: #fff;
+                border: 1px solid #444;
+                font-size: 14px;
+            }
+            #camera-preview {
+                width: 240px;
+                height: 150px;
+                background: #000;
+                margin: 10px auto;
+                border-radius: 10px;
+                object-fit: cover;
+            }
+        </style>
+
+        <div>
+            <input id="swal-name" class="swal2-input" placeholder="Enter your name" maxlength="32">
+            <input id="swal-email" class="swal2-input" placeholder="Enter your email" type="email">
+        </div>
+
+        <!-- 🎥 Camera Preview -->
+        <video id="camera-preview" autoplay muted playsinline></video>
+
+        <div style="display:flex; justify-content:center; gap:15px; margin-top:15px;">
+            <button id="camera-btn" class="swal-icon-btn" style="background:#3085d6;">${_PEER.videoOn}</button>
+            <button id="mic-btn" class="swal-icon-btn" style="background:#2ecc71;">${_PEER.audioOn}</button>
+            <button id="swap-camera-btn" class="swal-icon-btn" style="background:#f39c12;">🔄</button>
+        </div>
+
+        <div style="margin-top:15px; text-align:left;">
+            <label>🎙 <b>Microphone</b></label>
+            <select id="swal-mic-select" class="swal2-select"></select>
+
+            <label style="margin-top:10px;">🔊 <b>Speaker</b></label>
+            <select id="swal-speaker-select" class="swal2-select"></select>
+
+            <label style="margin-top:10px;">📹 <b>Camera</b></label>
+            <select id="swal-camera-select" class="swal2-select"></select>
+        </div>
+    `,
+        confirmButtonText: `✅ Join meeting`,
         customClass: { popup: 'init-modal-size' },
-        showClass: { popup: 'animate__animated animate__fadeInDown' },
-        hideClass: { popup: 'animate__animated animate__fadeOutUp' },
-        willOpen: () => {
+
+        willOpen: async () => {
             hide(loadingDiv);
+
             document.getElementById('swal-name').value = default_name;
             document.getElementById('swal-email').value = default_email;
 
-            // ✅ if force_peer_name true → disable inputs
-            if (force_peer_name) {
-                document.getElementById('swal-name').disabled = true;
-                document.getElementById('swal-email').disabled = true;
+            // 🎤 Devices भरना
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const micSelect = document.getElementById('swal-mic-select');
+            const speakerSelect = document.getElementById('swal-speaker-select');
+            const cameraSelect = document.getElementById('swal-camera-select');
+
+            devices.forEach(device => {
+                let option = document.createElement('option');
+                option.value = device.deviceId;
+                option.text = device.label || `${device.kind}`;
+                if (device.kind === 'audioinput') micSelect.appendChild(option);
+                if (device.kind === 'audiooutput') speakerSelect.appendChild(option);
+                if (device.kind === 'videoinput') cameraSelect.appendChild(option);
+            });
+
+            // 🎥 Camera preview setup
+            let currentFacingMode = "user"; 
+            let cameraStream;
+            let cameraOn = true;
+            let micOn = true;
+            const preview = document.getElementById('camera-preview');
+
+            async function startCamera() {
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                }
+                try {
+                    cameraStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: currentFacingMode }
+                    });
+                    preview.srcObject = cameraStream;
+                } catch (err) {
+                    console.error("Camera access denied:", err);
+                }
             }
+
+            await startCamera();
+
+            // 🎤 Mic/Camera toggle buttons
+            const cameraBtn = document.getElementById('camera-btn');
+            const micBtn = document.getElementById('mic-btn');
+            const swapCameraBtn = document.getElementById('swap-camera-btn');
+
+            // 📷 Camera toggle
+            cameraBtn.addEventListener('click', () => {
+                cameraOn = !cameraOn;
+                isVideoAllowed = cameraOn;
+                cameraBtn.innerHTML = cameraOn ? _PEER.videoOn : _PEER.videoOff;
+                cameraBtn.style.background = cameraOn ? "#3085d6" : "#e74c3c";
+
+                if (cameraStream) {
+                    cameraStream.getVideoTracks().forEach(track => {
+                        track.enabled = cameraOn;
+                    });
+                }
+            });
+
+            // 🎤 Mic toggle
+            micBtn.addEventListener('click', () => {
+                micOn = !micOn;
+                isAudioAllowed = micOn;
+                micBtn.innerHTML = micOn ? _PEER.audioOn : _PEER.audioOff;
+                micBtn.style.background = micOn ? "#2ecc71" : "#e74c3c";
+
+                if (cameraStream) {
+                    cameraStream.getAudioTracks().forEach(track => {
+                        track.enabled = micOn;
+                    });
+                }
+            });
+
+            // 🔄 Camera Swap
+            swapCameraBtn.addEventListener('click', async () => {
+                currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+                await startCamera();
+            });
         },
+
         preConfirm: () => {
             const name = document.getElementById('swal-name').value.trim();
             const email = document.getElementById('swal-email').value.trim();
@@ -1233,7 +1300,7 @@ async function whoAreYou() {
                 return false;
             }
 
-            // ✅ Save & assign globals
+            // ✅ Save globals
             window.localStorage.peer_name = name;
             window.localStorage.peer_email = email;
             setCookie(room_id + '_name', name, 30);
@@ -1242,32 +1309,25 @@ async function whoAreYou() {
             peer_email = email;
         }
     }).then(async () => {
-        // ✅ hide emoji button & init user section
-        usernameEmoji?.classList.add('hidden');
-        initUsernameEmojiButton?.classList.add('hidden');
-        initUser.classList.add('hidden'); // ✅ Hides popup remnants
+        Swal.fire({
+            title: 'Joining Meeting...',
+            text: 'Please wait',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => Swal.showLoading()
+        });
 
-        // ✅ Stop tracks before joining
-        if (initStream && !joinRoomWithScreen) {
-            await stopTracks(initStream);
-            elemDisplay('initVideo', false);
-            initVideoContainerShow(false);
-        }
+        await getPeerInfo();
+        await joinRoom(peer_name, room_id, peer_email);
 
-        getPeerInfo();
-        joinRoom(peer_name, room_id, peer_email);
+        Swal.close();
     });
-
-    if (!isVideoAllowed) {
-        elemDisplay('initVideo', false);
-        initVideoContainerShow(false);
-        hide(initVideoSelect);
-    }
-    if (!isAudioAllowed) {
-        hide(initMicrophoneSelect);
-        hide(initSpeakerSelect);
-    }
 }
+
+
+
+
+
 
 
 

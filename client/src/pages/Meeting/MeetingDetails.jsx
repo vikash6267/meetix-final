@@ -23,22 +23,28 @@ const MeetingDetails = () => {
   const storedUser = localStorage.getItem("user")
   const user = storedUser ? JSON.parse(storedUser) : null
 
+  const [page, setPage] = useState(1)
+const [hasMore, setHasMore] = useState(true)
+
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
-  useEffect(() => {
-    if (!user?._id) return
+useEffect(() => {
+  if (!user?._id) return;
 
-    const fetchMeetings = async () => {
-      setLoading(true)
-      const res = await getUserMeetings(user._id)
-      setMeetings(res)
-      setFilteredMeetings(res)
-      setLoading(false)
+  const fetchMeetings = async () => {
+    setLoading(true);
+    const res = await getUserMeetings(user._id, user.token, page);  // ✅ page pass
+    if (res?.meetings?.length) {
+      setMeetings((prev) => [...prev, ...res.meetings]);
+      setHasMore(page < res.totalPages);  // ✅ check if more pages are available
+    } else {
+      setHasMore(false);
     }
+    setLoading(false);
+  };
 
-    fetchMeetings()
-  }, [])
-
+  fetchMeetings();
+}, [page]);
   // Filter and sort meetings
   useEffect(() => {
     let filtered = [...meetings]
@@ -367,6 +373,18 @@ const MeetingDetails = () => {
               </div>
             )}
           </div>
+          {hasMore && (
+  <div className="p-4 flex justify-center">
+    <button
+      onClick={() => setPage((prev) => prev + 1)}
+      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+      disabled={loading}
+    >
+      {loading ? "Loading..." : "Load More"}
+    </button>
+  </div>
+)}
+
         </div>
       </div>
 

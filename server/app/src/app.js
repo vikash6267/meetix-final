@@ -764,95 +764,130 @@ function startServer() {
     ffmpeg.setFfmpegPath(ffmpegPath);
 
 
-    app.post("/save-silent-recording", upload.single("audio"), async (req, res) => {
-        try {
-            console.log("🎙️ Recording upload hit!");
+app.post("/save-silent-recording", upload.single("audio"), async (req, res) => {
+    try {
+        console.log("🎙️ Recording upload hit!");
 
-            const { roomId, peerId } = req.body;
-            const buffer = req.file.buffer;
+        const { roomId, peerId } = req.body;
+        const buffer = req.file.buffer;
 
-            // ✅ Save original WEBM
-            const dir = path.join(__dirname, "../recordings");
-            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        // ✅ Save original WEBM
+        const dir = path.join(__dirname, "../recordings");
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
-            const filename = `meeting_${roomId}_${peerId}_${Date.now()}.webm`;
-            const filepath = path.join(dir, filename);
-            fs.writeFileSync(filepath, buffer);
-            console.log(`✅ Recording saved at: ${filepath}`);
+        const filename = `meeting_${roomId}_${peerId}_${Date.now()}.webm`;
+        const filepath = path.join(dir, filename);
+        fs.writeFileSync(filepath, buffer);
+        console.log(`✅ Recording saved at: ${filepath}`);
 
-            // ✅ Convert to WAV
-            const wavPath = filepath.replace(".webm", ".wav");
-            await new Promise((resolve, reject) => {
-                ffmpeg(filepath)
-                    .noVideo()
-                    .audioCodec("pcm_s16le")
-                    .audioFrequency(16000)
-                    .audioChannels(1)
-                    .format("wav")
-                    .on("start", (cmd) => console.log("🎯 FFmpeg command:", cmd))
-                    .on("end", resolve)
-                    .on("error", reject)
-                    .save(wavPath);
-            });
+        // ✅ Convert to WAV
+        const wavPath = filepath.replace(".webm", ".wav");
+        await new Promise((resolve, reject) => {
+            ffmpeg(filepath)
+                .noVideo()
+                .audioCodec("pcm_s16le")
+                .audioFrequency(16000)
+                .audioChannels(1)
+                .format("wav")
+                .on("start", (cmd) => console.log("🎯 FFmpeg command:", cmd))
+                .on("end", resolve)
+                .on("error", reject)
+                .save(wavPath);
+        });
 
-            console.log("✅ Converted to WAV:", wavPath);
+        console.log("✅ Converted to WAV:", wavPath);
 
-            // ✅ Transcribe with Whisper
-            const transcription = await openai.audio.transcriptions.create({
-                file: fs.createReadStream(wavPath),
-                model: "whisper-1",
-                language: "en"
-            });
+        // ✅ Transcribe with Whisper
+        const transcription = await openai.audio.transcriptions.create({
+            file: fs.createReadStream(wavPath),
+            model: "whisper-1",
+            language: "en"
+        });
 
-            const transcriptText = transcription.text;
-            console.log("✅ Transcribed Text:", transcriptText);
+        const transcriptText = transcription.text;
+        console.log("✅ Transcribed Text:", transcriptText);
 
-            // ✅ Summarize with GPT
-            const summaryResponse = await openai.chat.completions.create({
-                model: "gpt-4o-mini",
-                messages: [
-                    { role: "system", content: "You summarize transcripts in 3-4 sentences." },
-                    { role: "user", content: `Summarize this transcript: ${transcriptText}` }
-                ]
-            });
+        // ✅ Summarize with GPT (Structured Output)
+        const summaryResponse = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                { role: "system", content: "You are an assistant that creates structured meeting notes." },
+                { role: "user", content: `Analyze the following transcript and provide:\n\n1. A 3-4 sentence summary.\n2. Key Topics discussed.\n3. Action Items.\n4. Key Questions asked.\n\nTranscript:\n${transcriptText}` }
+            ]
+        });
 
-            const summary = summaryResponse.choices[0].message.content;
+        const aiResponse = summaryResponse.choices[0].message.content;
 
-            // ✅ Fetch Attendee
-            const attendee = await Attendee.findOne({ roomId, peerId });
-            if (!attendee || !attendee.peerEmail) {
-                throw new Error("Attendee with email not found");
-            }
+        console.log("✅ GPT Response:", aiResponse);
 
-            // ✅ Send email
-            const subject = `Your Meeting Summary for Room ${roomId}`;
-            const emailHTML = `
+        // ✅ Extract different parts using simple regex (optional: parse with better method)
+        const summaryMatch = aiResponse.match(/Summary[:\-]?\s*([\s\S]*?)(?=Topics|$)/i);
+        const topicsMatch = aiResponse.match(/Topics[:\-]?\s*([\s\S]*?)(?=Action Items|$)/i);
+        const actionItemsMatch = aiResponse.match(/Action Items[:\-]?\s*([\s\S]*?)(?=Key Questions|$)/i);
+        const questionsMatch = aiResponse.match(/Key Questions[:\-]?\s*([\s\S]*)/i);
+
+        const summary = summaryMatch ? summaryMatch[1].trim() : "No summary found.";
+        const topics = topicsMatch ? topicsMatch[1].trim() : "No topics found.";
+        const actionItems = actionItemsMatch ? actionItemsMatch[1].trim() : "No action items found.";
+        const keyQuestions = questionsMatch ? questionsMatch[1].trim() : "No questions found.";
+
+        // ✅ Fetch Attendee
+        const attendee = await Attendee.findOne({ roomId, peerId });
+        if (!attendee || !attendee.peerEmail) {
+            throw new Error("Attendee with email not found");
+        }
+
+        // ✅ Create HTML Email
+        const subject = `Your Meeting Summary for Room ${roomId}`;
+        const emailHTML = `
             <h2>Hi ${attendee.peerName || "there"},</h2>
-            <p>Here is the summary of your recent meeting:</p>
-            <blockquote>${summary}</blockquote>
+            <p>Here’s the detailed recap of your meeting:</p>
+
+            <h3>📄 Summary</h3>
+            <p>${summary}</p>
+
+            <h3>📌 Topics</h3>
+            <ul>${topics.split("\n").map(item => `<li>${item}</li>`).join("")}</ul>
+
+            <h3>✅ Action Items</h3>
+            <ul>${actionItems.split("\n").map(item => `<li>${item}</li>`).join("")}</ul>
+
+            <h3>❓ Key Questions</h3>
+            <ul>${keyQuestions.split("\n").map(item => `<li>${item}</li>`).join("")}</ul>
+
+            <h3>📝 Full Transcript</h3>
+            <blockquote style="background:#f9f9f9;padding:10px;border-left:3px solid #ccc;">
+                ${transcriptText}
+            </blockquote>
+
             <p>Thanks,<br/>Team</p>
         `;
 
-            await mailSender(attendee.peerEmail, subject, emailHTML);
-            console.log("✅ Summary email sent to:", attendee.peerEmail);
+        // ✅ Send email
+        await mailSender(attendee.peerEmail, subject, emailHTML);
+        console.log("✅ Full meeting notes email sent to:", attendee.peerEmail);
 
-            // ✅ Clean up
-            fs.unlinkSync(filepath);
-            fs.unlinkSync(wavPath);
+        // ✅ Clean up
+        fs.unlinkSync(filepath);
+        fs.unlinkSync(wavPath);
 
-            // ✅ Send response
-            res.json({
-                success: true,
-                transcript: transcriptText,
-                summary,
-                emailSentTo: attendee.peerEmail
-            });
+        // ✅ Send response
+        res.json({
+            success: true,
+            transcript: transcriptText,
+            summary,
+            topics,
+            actionItems,
+            keyQuestions,
+            emailSentTo: attendee.peerEmail
+        });
 
-        } catch (error) {
-            console.error("❌ Error saving & processing recording:", error);
-            res.status(500).json({ success: false, error: error.message });
-        }
-    });
+    } catch (error) {
+        console.error("❌ Error saving & processing recording:", error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 
     // Handle Direct join room with params
     app.get('/join/', async (req, res) => {

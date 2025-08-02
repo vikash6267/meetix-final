@@ -245,6 +245,8 @@ exports.getRoomDetails = async (req, res) => {
 
 exports.getUserMeetingsDetails = async (req, res) => {
   const { userId } = req.params;
+  const page = parseInt(req.query.page) || 1;   // Default page 1
+  const limit = 10;  // Har page par 10 meetings
 
   try {
     const user = await User.findById(userId);
@@ -252,12 +254,22 @@ exports.getUserMeetingsDetails = async (req, res) => {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
+    // ✅ Total meetings count
+    const totalMeetings = user.meetings.length;
+
+    // ✅ Sort meetings by joinedAt (latest first)
+    const sortedMeetings = [...user.meetings].sort((a, b) => new Date(b.joinedAt) - new Date(a.joinedAt));
+
+    // ✅ Pagination logic
+    const startIndex = (page - 1) * limit;
+    const paginatedMeetings = sortedMeetings.slice(startIndex, startIndex + limit);
+
     const meetingsData = [];
 
-    for (const meeting of user.meetings) {
+    for (const meeting of paginatedMeetings) {
       const roomId = meeting.roomId;
 
-      // 1. Get all messages for roomId
+      // 1️⃣ Get all messages for this roomId
       const usersWithRoom = await User.find({ 'roomActivity.roomId': roomId });
       let allMessages = [];
       usersWithRoom.forEach(u => {
@@ -270,32 +282,32 @@ exports.getUserMeetingsDetails = async (req, res) => {
 
       const messageCount = allMessages.length;
 
-      // 2. Extract unique peerNames from messages
+      // 2️⃣ Extract unique peerNames from messages
       const messagePeerNames = new Set(
-        allMessages.map(msg => msg.peer_name).filter(Boolean)
+        allMessages.map(msg => msg.peerName).filter(Boolean)
       );
 
-      // 3. Get attendees whose peerName exists in messages
+      // 3️⃣ Get ALL attendees (total attendees count)
       const allAttendees = await Attendee.find({ roomId });
+      const totalAttendeeNames = new Set(allAttendees.map(att => att.peerName));
+      const attendeeCount = totalAttendeeNames.size;
+
+      // (Optional) Message wale attendees ka count (agar chahiye)
       const filteredAttendees = allAttendees.filter(att =>
         messagePeerNames.has(att.peerName)
       );
-      const uniqueAttendeeNames = new Set(
-        filteredAttendees.map(att => att.peerName)
-      );
-      const attendeeCount = uniqueAttendeeNames.size;
+      const messageAttendeeNames = new Set(filteredAttendees.map(att => att.peerName));
+      const messageAttendeeCount = messageAttendeeNames.size;
 
-      // 4. Get sessions with hostName that exists in messages
+      // 4️⃣ Sessions count
       const allSessions = await Session.find({ sessionId: roomId });
       const filteredSessions = allSessions.filter(session =>
         messagePeerNames.has(session.hostName)
       );
-      const uniqueSessionHostNames = new Set(
-        filteredSessions.map(s => s.hostName)
-      );
+      const uniqueSessionHostNames = new Set(filteredSessions.map(s => s.hostName));
       const sessionCount = uniqueSessionHostNames.size;
 
-      // 5. Get recording count
+      // 5️⃣ Recording count
       const allUsersWithRecordings = await User.find({ 'recordings.roomId': roomId });
       let recordingCount = 0;
       allUsersWithRecordings.forEach(u => {
@@ -306,11 +318,13 @@ exports.getUserMeetingsDetails = async (req, res) => {
         });
       });
 
+      // Push data for this meeting
       meetingsData.push({
         roomId,
         joinedAt: meeting.joinedAt,
         messageCount,
-        attendeeCount,
+        attendeeCount,            // ✅ Total attendees
+        messageAttendeeCount,     // ✅ Message bhejne wale attendees
         sessionCount,
         recordingCount
       });
@@ -319,7 +333,9 @@ exports.getUserMeetingsDetails = async (req, res) => {
     return res.status(200).json({
       success: true,
       userId,
-      totalMeetings: user.meetings.length,
+      totalMeetings,
+      currentPage: page,
+      totalPages: Math.ceil(totalMeetings / limit),
       meetings: meetingsData
     });
 
@@ -332,6 +348,8 @@ exports.getUserMeetingsDetails = async (req, res) => {
     });
   }
 };
+
+
 
 
 exports.sendMeetingInvite = async (req, res) => {
