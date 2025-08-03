@@ -25,6 +25,7 @@ const MeetingDetails = () => {
 
   const [page, setPage] = useState(1)
 const [hasMore, setHasMore] = useState(true)
+const [totalPages, setTotalPages] = useState(1); // total from backend
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
@@ -33,18 +34,21 @@ useEffect(() => {
 
   const fetchMeetings = async () => {
     setLoading(true);
-    const res = await getUserMeetings(user._id, user.token, page);  // ✅ page pass
-    if (res?.meetings?.length) {
-      setMeetings((prev) => [...prev, ...res.meetings]);
-      setHasMore(page < res.totalPages);  // ✅ check if more pages are available
+    const res = await getUserMeetings(user._id, user.token, page); // page passed
+
+    if (res?.meetings) {
+      setMeetings(res.meetings); // replace, not append
+      setTotalPages(res.totalPages || 1);
     } else {
-      setHasMore(false);
+      setMeetings([]);
     }
+
     setLoading(false);
   };
 
   fetchMeetings();
 }, [page]);
+
   // Filter and sort meetings
   useEffect(() => {
     let filtered = [...meetings]
@@ -373,14 +377,34 @@ useEffect(() => {
               </div>
             )}
           </div>
-          {hasMore && (
-  <div className="p-4 flex justify-center">
+          {totalPages > 1 && (
+  <div className="flex justify-center gap-2 items-center py-4">
     <button
-      onClick={() => setPage((prev) => prev + 1)}
-      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
-      disabled={loading}
+      onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+      disabled={page === 1}
+      className="px-3 py-1 rounded border text-sm bg-white hover:bg-gray-100 disabled:opacity-50"
     >
-      {loading ? "Loading..." : "Load More"}
+      Prev
+    </button>
+
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
+      <button
+        key={pg}
+        onClick={() => setPage(pg)}
+        className={`px-3 py-1 rounded border text-sm ${
+          page === pg ? 'bg-blue-600 text-white' : 'bg-white hover:bg-gray-100'
+        }`}
+      >
+        {pg}
+      </button>
+    ))}
+
+    <button
+      onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+      disabled={page === totalPages}
+      className="px-3 py-1 rounded border text-sm bg-white hover:bg-gray-100 disabled:opacity-50"
+    >
+      Next
     </button>
   </div>
 )}
