@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Header = ({ toggleSidebar, name}) => {
   return (
-    <div className="bg-gradient-to-l from-black to-[#2F4F29] text-white p-4 flex justify-between items-center">
+    <div className="bg-[#191c1e] text-white p-4 flex justify-between items-center">
       <div className="md:hidden">
         <button className="text-white focus:outline-none" onClick={toggleSidebar}>
           <FaBars size={24} />

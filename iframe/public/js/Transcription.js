@@ -130,6 +130,7 @@ class Transcription {
                     this.handleTranscript(transcriptionData);
                 }
             };
+            
 
             this.transcription.onaudiostart = () => {
                 console.log('Transcription start to capture your voice');

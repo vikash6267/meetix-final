@@ -54,12 +54,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const user = storedUser ? JSON.parse(storedUser) : null;
   return (
     <div
-      className={`fixed top-0 left-0 bg-gradient-to-t from-black to-[#2F4F29] text-white w-72 h-screen p-6 overflow-y-auto z-50 transform transition-all duration-300 ease-in-out shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:w-64 hide-scrollbar`}
+      className={`fixed top-0 left-0 bg-[#191c1e] text-white w-72 h-screen p-6 overflow-y-auto z-50 transform transition-all duration-300 ease-in-out shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:w-64 hide-scrollbar`}
     >
       {/* Close Button (Mobile) */}
       <div className="md:hidden absolute top-4 right-4">
         <button
-          className="text-white hover:text-[#2F4F29] transition-colors focus:outline-none"
+          className="text-white hover:text-[#4b155d] transition-colors focus:outline-none"
           onClick={toggleSidebar}
         >
           <FaTimes size={24} />
@@ -84,8 +84,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             to="/"
             className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 ${
               location.pathname === '/'
-                ? 'bg-[#2F4F29]       600 shadow-lg'
-                : 'hover:bg-[#2F4F29]       700 hover:shadow-md hover:pl-4'
+                ? 'bg-[#4b155d]       600 shadow-lg'
+                : 'hover:bg-[#4b155d]       700 hover:shadow-md hover:pl-4'
             }`}
           >
             <div className="flex items-center">
@@ -99,7 +99,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </li>
 
         {/* Dashboard Pages (shown after login) */}
-        <li className="pt-4 mt-4 border-t border-[#2F4F29]">
+        <li className="pt-4 mt-4 border-t border-[#4b155d]">
           <span className="text-xs font-semibold text-white uppercase tracking-wider pl-3">
             Dashboard
           </span>
@@ -110,8 +110,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             onClick={() => setIsAnalysisExpanded(!isAnalysisExpanded)}
             className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 cursor-pointer ${
               location.pathname.startsWith('/meetings/')
-                ? 'bg-[#2F4F29]  shadow-lg'
-                : 'hover:bg-[#2F4F29]  hover:shadow-md hover:pl-4'
+                ? 'bg-[#6f2687]  shadow-lg'
+                : 'hover:bg-[#4b155d]  hover:shadow-md hover:pl-4'
             }`}
           >
             <div className="flex items-center">
@@ -133,7 +133,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${
                   location.pathname === '/meetings/details'
                     ? 'bg-teal-800 text-white font-medium'
-                    : 'text-white hover:bg-[#2F4F29] '
+                    : 'text-white hover:bg-[#4b155d] '
                 }`}
               >
                 <FaUserCheck className="mr-2 text-xs" />
@@ -150,8 +150,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 cursor-pointer ${
               location.pathname === '/meetings2' ||
               location.pathname.startsWith('/meetings2/')
-                ? 'bg-[#2F4F29]       600 shadow-lg'
-                : 'hover:bg-[#2F4F29]       700 hover:shadow-md hover:pl-4'
+                ? 'bg-[#4b155d]       600 shadow-lg'
+                : 'hover:bg-[#4b155d]       700 hover:shadow-md hover:pl-4'
             }`}
           >
             <div className="flex items-center">
@@ -174,7 +174,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${
                   location.pathname === '/meetings/new'
                     ? 'bg-teal-800 text-white font-medium'
-                    : 'text-white hover:bg-[#2F4F29]'
+                    : 'text-white hover:bg-[#4b155d]'
                 }`}
               >
                 <FaPlusCircle className="mr-2 text-xs" />
@@ -187,7 +187,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${
                   location.pathname === '/meetings2/upcoming'
                     ? 'bg-teal-800 text-white font-medium'
-                    : 'text-white hover:bg-[#2F4F29]'
+                    : 'text-white hover:bg-[#4b155d]'
                 }`}
               >
                 <FaCalendarAlt className="mr-2 text-xs" />
@@ -199,7 +199,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 to="/meetings/completed"
                 className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${location.pathname === '/meetings/completed'
                     ? 'bg-teal-800 text-white font-medium'
-                    : 'text-white hover:bg-[#2F4F29]'
+                    : 'text-white hover:bg-[#4b155d]'
                   }`}
               >
                 <FaVideo className="mr-2 text-xs" />
@@ -211,7 +211,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 to="/meetings/recordings"
                 className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${location.pathname === '/meetings/recordings'
                     ? 'bg-teal-800 text-white font-medium'
-                    : 'text-white hover:bg-[#2F4F29]'
+                    : 'text-white hover:bg-[#4b155d]'
                   }`}
               >
                 <FaFileDownload className="mr-2 text-xs" />
@@ -226,8 +226,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             onClick={() => setIsSubsExpanded(!isSubsExpanded)}
             className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 cursor-pointer ${
               location.pathname.startsWith('/subscription')
-                ? 'bg-[#2F4F29] shadow-lg'
-                : 'hover:bg-[#2F4F29] hover:shadow-md hover:pl-4'
+                ? 'bg-[#4b155d] shadow-lg'
+                : 'hover:bg-[#4b155d] hover:shadow-md hover:pl-4'
             }`}
           >
             <div className="flex items-center">
@@ -250,7 +250,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${
                   location.pathname === '/subscription/plan'
                     ? 'bg-teal-800 text-white font-medium'
-                    : 'text-white hover:bg-[#2F4F29]'
+                    : 'text-white hover:bg-[#4b155d]'
                 }`}
               >
                 <FaUserCheck className="mr-2 text-xs" />
@@ -259,7 +259,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </li>
           </ul>
         )}
-        <li className="pt-4 mt-4 border-t border-[#2F4F29]">
+        <li className="pt-4 mt-4 border-t border-[#4b155d]">
           <span className="text-xs font-semibold text-white uppercase tracking-wider pl-3">
             Developers
           </span>
@@ -270,8 +270,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             onClick={() => setIsDevelopersExpanded(!isDevelopersExpanded)}
             className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 cursor-pointer ${
               location.pathname.startsWith('/developers')
-                ? 'bg-[#2F4F29]       600 shadow-lg'
-                : 'hover:bg-[#2F4F29]       700 hover:shadow-md hover:pl-4'
+                ? 'bg-[#4b155d]       600 shadow-lg'
+                : 'hover:bg-[#4b155d]       700 hover:shadow-md hover:pl-4'
             }`}
           >
             <div className="flex items-center">
@@ -293,7 +293,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${
                   location.pathname === '/developers/documentation'
                     ? 'bg-teal-800 text-white font-medium'
-                    : 'text-white hover:bg-[#2F4F29]'
+                    : 'text-white hover:bg-[#4b155d]'
                 }`}
               >
                 <FaBook className="mr-2 text-xs" />
@@ -307,7 +307,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${
                   location.pathname === '/developers/integration-guide'
                     ? 'bg-teal-800 text-white font-medium'
-                    : 'text-white hover:bg-[#2F4F29]'
+                    : 'text-white hover:bg-[#4b155d]'
                 }`}
               >
                 <FaVideo className="mr-2 text-xs" />
@@ -318,13 +318,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         )}
 
         {/* Settings */}
-        {/* <li className="pt-4 mt-4 border-t border-[#2F4F29]       700">
+        {/* <li className="pt-4 mt-4 border-t border-[#4b155d]       700">
           <Link 
             to="/settings"
             className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 ${
               location.pathname === '/settings' 
-                ? 'bg-[#2F4F29]       600 shadow-lg' 
-                : 'hover:bg-[#2F4F29]       700 hover:shadow-md hover:pl-4'
+                ? 'bg-[#4b155d]       600 shadow-lg' 
+                : 'hover:bg-[#4b155d]       700 hover:shadow-md hover:pl-4'
             }`}
           >
             <div className="flex items-center">
@@ -337,7 +337,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
         {user && user.isAdmin === "true" && (
           <>
-            <li className="pt-4 mt-4 border-t border-[#2F4F29]">
+            <li className="pt-4 mt-4 border-t border-[#4b155d]">
               <span className="text-xs font-semibold text-white uppercase tracking-wider pl-3">
                 Admin
               </span>
@@ -348,8 +348,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 onClick={() => setIsAdminExpanded(!isAdminExpanded)}
                 className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 cursor-pointer ${
                   location.pathname.startsWith('/admin')
-                    ? 'bg-[#2F4F29] shadow-lg'
-                    : 'hover:bg-[#2F4F29] hover:shadow-md hover:pl-4'
+                    ? 'bg-[#4b155d] shadow-lg'
+                    : 'hover:bg-[#4b155d] hover:shadow-md hover:pl-4'
                 }`}
               >
                 <div className="flex items-center">
@@ -372,7 +372,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${
                       location.pathname === '/admin/users'
                         ? 'bg-teal-800 text-white font-medium'
-                        : 'text-white hover:bg-[#2F4F29]'
+                        : 'text-white hover:bg-[#4b155d]'
                     }`}
                   >
                     <FaUserCheck className="mr-2 text-xs" />
@@ -385,7 +385,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     className={`text-white flex items-center p-2 text-sm rounded-lg transition-colors ${
                       location.pathname === '/admin/subs'
                         ? 'bg-teal-800 text-white font-medium'
-                        : 'text-white hover:bg-[#2F4F29]'
+                        : 'text-white hover:bg-[#4b155d]'
                     }`}
                   >
                     <FaUserCheck className="mr-2 text-xs" />
