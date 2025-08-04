@@ -48,7 +48,7 @@ router.post("/webhook", async (req, res) => {
       match = await TempWhopSubscription.findOne({
         whopPlanId: { $regex: planId, $options: "i" },
         isSubscribed: false,
-        createdAt: { $gte: oneMinuteAgo },
+     
       });
     }
 
