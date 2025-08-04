@@ -62,7 +62,55 @@ const AllSubscriptions = () => {
     }
   }, [token])
 
- const handleSubscribe = async (plan) => {
+//  const handleSubscribe = async (plan) => {
+//   if (!user?.email) {
+//     toast.error("User email not found. Please log in again.");
+//     return;
+//   }
+
+//   setLoading(true);
+
+//   try {
+//     console.log("📦 Creating subscription for plan:", plan);
+
+//     const response = await axios.post(
+//       "https://meetix.mahitechnocrafts.in/api/v1/subscription/create",
+//       {
+//         subscriptionId: plan._id,
+//         redirectUrl: `https://www.mahitechnocrafts.in/payment-success?subscriptionId=${plan._id}`,
+//         metadata: {
+//           email: user.email,
+//           userId: user.id || user._id,
+//           planType: plan.type
+//         }
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json"
+//         }
+//       }
+//     );
+
+//     console.log("✅ Subscription creation response:", response.data);
+
+//     if (response.data.redirectUrl) {
+//       window.location.href = response.data.redirectUrl; // 🔁 Redirect to Whop
+//     } else {
+//       toast.error("❌ Failed to start checkout - no redirect URL received");
+//     }
+//   } catch (error) {
+//     console.error("❌ Subscription error:", error);
+//     toast.error(error.response?.data?.message || "Failed to start checkout");
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+
+
+
+
+const handleSubscribe = async (plan) => {
   if (!user?.email) {
     toast.error("User email not found. Please log in again.");
     return;
@@ -71,18 +119,16 @@ const AllSubscriptions = () => {
   setLoading(true);
 
   try {
-    console.log("📦 Creating subscription for plan:", plan);
+    console.log("📤 Initiating temporary subscription...");
 
-    const response = await axios.post(
-      "https://meetix.mahitechnocrafts.in/api/v1/subscription/create",
+    // Step 1: Call /initiate-subscription API
+    await axios.post(
+      "https://meetix.mahitechnocrafts.in/api/v1/subscription/initiate-subscription",
       {
         subscriptionId: plan._id,
-        redirectUrl: `https://www.mahitechnocrafts.in/payment-success?subscriptionId=${plan._id}`,
-        metadata: {
-          email: user.email,
-          userId: user.id || user._id,
-          planType: plan.type
-        }
+        userId: user?._id,
+        whopPlanId: plan.whopPlanId,
+        email: user.email
       },
       {
         headers: {
@@ -92,13 +138,12 @@ const AllSubscriptions = () => {
       }
     );
 
-    console.log("✅ Subscription creation response:", response.data);
+    console.log("✅ Temp subscription created.");
 
-    if (response.data.redirectUrl) {
-      window.location.href = response.data.redirectUrl; // 🔁 Redirect to Whop
-    } else {
-      toast.error("❌ Failed to start checkout - no redirect URL received");
-    }
+    // ✅ Step 2: Redirect to Whop checkout with metadata
+    const whopRedirectUrl = `${plan.whopPlanId}?metadata[email]=${encodeURIComponent(user.email)}&metadata[user_id]=${user?._id}`;
+
+    window.location.href = whopRedirectUrl;
   } catch (error) {
     console.error("❌ Subscription error:", error);
     toast.error(error.response?.data?.message || "Failed to start checkout");
@@ -106,6 +151,9 @@ const AllSubscriptions = () => {
     setLoading(false);
   }
 };
+
+
+
 
   const getButtonText = plan => {
     if (!userSubscription) return "Subscribe"
@@ -160,15 +208,17 @@ console.log(plans)
                   <li key={idx}>• {pt.trim()}</li>
                 ))}
               </ul>
-              <a
-                href={`${plan.whopPlanId}&metadata[user_id]=${user?._id}`}
+              <button
+              type="button"
+               
+                onClick={()=>handleSubscribe(plan)}
                 className={`w-full ${buttonClasses(
                   plan.type
                 )} text-white py-3 px-4 rounded-md transition duration-300 mt-auto disabled:opacity-50 disabled:cursor-not-allowed`}
                 disabled={userSubscription?.serviceId === plan._id || loading}
               >
                 {loading ? "Processing..." : getButtonText(plan)}
-              </a>
+              </button>
             </div>
           ))}
         </div>
