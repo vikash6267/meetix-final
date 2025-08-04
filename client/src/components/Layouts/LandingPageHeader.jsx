@@ -104,8 +104,8 @@ const LandingPageHeader = () => {
     return (
         <header className="flex justify-between items-center px-6 py-4 border-b border-gray-200 relative">
             <div className="flex items-center">
-                <VideoCameraIcon className="h-8 w-8 text-[#00FF40]" />
-                <span className="ml-2 text-xl font-bold text-white">Meetix</span>
+                <img src="/src/assets/meetix-logo.png" alt="" className="h-10 w-15"/>
+                <span className="ml-2 text-xl font-semibold tracking-tight text-white">Meetix</span>
             </div>
 
             {/* Desktop Nav */}
@@ -149,19 +149,19 @@ const LandingPageHeader = () => {
                 {isLoggedIn ? (
                     <button
                         onClick={handleLogout}
-                        className="text-white hover:text-blue-600 font-medium"
+                        className="text-white hover:text-purple-500 bg-purple-600 px-4 py-2 rounded-2xl font-semibold tracking-tight"
                     >
                         Log Out
                     </button>
                 ) : (
-                    <Link to={'/login'} className="text-white hover:text-blue-600 font-medium">
+                    <Link to={'/login'} className="text-white hover:text-purple-500 bg-purple-600 px-4 py-2 rounded-2xl font-semibold tracking-tight">
                         Sign In
                     </Link>
                 )}
                 {isLoggedIn && (
                     <Link
                         to={'/meetings/details'}
-                        className="bg-[#00FF40] hover:bg-[#00FF40] text-black px-4 py-2 rounded-3xl font-bold"
+                        className="bg-purple-600 hover:bg-purple-400 text-white px-4 py-2 rounded-3xl font-semibold tracking-tight"
                     >
                         Go to Dashboard
                     </Link>
@@ -216,7 +216,7 @@ const LandingPageHeader = () => {
                     {isLoggedIn && (
                         <Link
                             to={'/meetings/details'}
-                            className="bg-[#00FF40] hover:bg-[#00FF40] text-white px-4 py-2 rounded-md font-medium text-center"
+                            className="bg-purple-600 text-white px-4 py-2 rounded-md font-medium text-center"
                         >
                             Go to Dashboard
                         </Link>
