@@ -78,15 +78,15 @@ const userSchema = new mongoose.Schema({
       joinedAt: { type: Date, default: Date.now },
       shortSummary: { type: String },
       participants: [{ type: String, match: /.+\@.+\..+/ }],
-      isCancelled: { type: Boolean, default: false } ,
-      noti30min: { type: Boolean, default: false } ,
+      isCancelled: { type: Boolean, default: false },
+      noti30min: { type: Boolean, default: false },
     }
   ]
 
   ,
 
   phone: { type: String },
-company: { type: String },
+  company: { type: String },
 
   recordings: [
     {

@@ -1109,7 +1109,13 @@ function getInfo() {
 async function whoAreYou() {
     console.log('04 ----> Who are you?');
     document.body.style.background = 'var(--body-bg)';
+const queryString = window.location.search; // e.g., ?room=abc123&id=xyz789
+console.log('✅ Full Query String:', queryString);
 
+const urlParams = new URLSearchParams(queryString);
+const idFromQuery = urlParams.get('id'); // You can also get other params like `room`
+console.log('✅ ID from Query:', idFromQuery);
+ 
     try {
         const response = await axios.get('/config', { timeout: 5000 });
         const serverButtons = response.data.message;
@@ -1132,7 +1138,26 @@ async function whoAreYou() {
         joinRoom(peer_name, room_id, peer_email);
         return;
     }
+ if (idFromQuery) {
+    try {
+      const response = await axios.get(`https://meetix.mahitechnocrafts.in/api/v1/user/user-details/${idFromQuery}`);
+      if (response.data.success) {
+        const user = response.data.user;
 
+        // ✅ Store in localStorage and cookie
+        window.localStorage.peer_name = user.username || "";
+        window.localStorage.peer_email = user.email || "";
+        setCookie(room_id + '_name', user.username || "", 30);
+        setCookie(room_id + '_email', user.email || "", 30);
+
+        // Set to globals if needed
+        peer_name = user.username || "";
+        peer_email = user.email || "";
+      }
+    } catch (err) {
+      console.error("❌ Failed to fetch user by ID:", err.message);
+    }
+  }
     // ✅ Load defaults
     let default_name = window.localStorage.peer_name || getCookie(room_id + '_name') || '';
     let default_email = window.localStorage.peer_email || getCookie(room_id + '_email') || '';

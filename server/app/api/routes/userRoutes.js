@@ -392,6 +392,52 @@ router.post("/verify-role-change-otp", async (req, res) => {
 
   res.status(200).json({ message: `User role updated to ${role}` });
 });
+router.get("/user-details/:id", async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({
+      success: false,
+      message: "User ID is required",
+    });
+  }
+
+  try {
+    let user;
+
+    // Check if ID is valid Mongo ObjectId
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+    
+    if (isObjectId) {
+      user = await User.findById(id).lean();
+    }
+
+    // Fallback to checking by email only if not found and ID is not ObjectId
+    if (!user) {
+      user = await User.findOne({ email: id }).lean();
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User details fetched successfully",
+      user,
+    });
+  } catch (err) {
+    console.error("Error fetching user details:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching user details",
+    });
+  }
+});
+
 
 
 
