@@ -16,6 +16,35 @@ const User = require("../models/User");
 const { sendOtp, verifyOtp, resetPassword } = require("../controllers/otpCtrl");
 const bcrypt = require('bcrypt');
 const OTP = require("../models/OTP");
+const { OpenAI } = require('openai');
+
+
+
+
+
+const openai = new OpenAI({ apiKey: process.env.CHATGPT_API_KEY});
+
+router.post('/translate-text', async (req, res) => {
+    const { text, targetLang } = req.body;
+
+    try {
+        const response = await openai.chat.completions.create({
+            model: "gpt-4",
+            messages: [
+                { role: "system", content: `Translate the following text to ${targetLang}.` },
+                { role: "user", content: text }
+            ],
+            temperature: 0.3,
+        });
+
+        const translatedText = response.choices[0].message.content;
+        res.json({ translatedText });
+    } catch (err) {
+        console.error('Translation error:', err.message);
+        res.status(500).json({ error: 'Translation failed' });
+    }
+});
+
 
 // 🔹 Add an upcoming meeting
 router.post("/create/:userId", addUpcomingMeeting);

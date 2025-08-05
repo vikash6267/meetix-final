@@ -94,6 +94,8 @@ class Transcription {
         return Boolean(this.speechTranscription);
     }
 
+
+
     init() {
         if (this.isSupported()) {
             this.handleLanguages();
@@ -112,24 +114,43 @@ class Transcription {
                     ? userLog('info', 'Transcription started', 'top-end')
                     : (transcription.isPersistent = true);
             };
+            async function translateText(text, targetLang = 'en') {
+                try {
+                    const response = await fetch('https://localhost:3010/api/v1/user/translate-text', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ text, targetLang }),
+                    });
 
-            this.transcription.onresult = (e) => {
-                const current = e.resultIndex;
-                const transcript = e.results[current][0].transcript;
-                const transcriptionData = {
-                    type: 'transcript',
-                    room_id: room_id,
-                    peer_name: peer_name,
-                    peer_avatar: peer_avatar,
-                    text_data: transcript,
-                    time_stamp: new Date(),
-                    broadcast: true,
-                };
-                if (transcript) {
-                    this.sendTranscript(transcriptionData);
-                    this.handleTranscript(transcriptionData);
+                    const data = await response.json();
+                    return data.translatedText;
+                } catch (err) {
+                    console.error('Translation error:', err);
+                    return text; // fallback
                 }
-            };
+            }
+
+           this.transcription.onresult = async (e) => {
+    const current = e.resultIndex;
+    const transcript = e.results[current][0].transcript;
+
+    if (transcript) {
+        const translated = await translateText(transcript, transcriptionDialect.value.split('-')[0]); // example
+        const transcriptionData = {
+            type: 'transcript',
+            room_id: room_id,
+            peer_name: peer_name,
+            peer_avatar: peer_avatar,
+            text_data: translated,
+            time_stamp: new Date(),
+            broadcast: true,
+        };
+
+        this.sendTranscript(transcriptionData);
+        this.handleTranscript(transcriptionData);
+    }
+};
+
 
             this.transcription.onaudiostart = () => {
                 console.log('Transcription start to capture your voice');
@@ -195,8 +216,8 @@ class Transcription {
             peer_avatar && rc.isImageURL(peer_avatar)
                 ? peer_avatar
                 : rc.isValidEmail(peer_name)
-                  ? rc.genGravatar(peer_name)
-                  : rc.genAvatarSvg(peer_name, 32);
+                    ? rc.genGravatar(peer_name)
+                    : rc.genAvatarSvg(peer_name, 32);
 
         if (this.isHidden) {
             if (this.showOnMessage) {
