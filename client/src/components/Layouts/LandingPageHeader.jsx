@@ -104,10 +104,10 @@ const LandingPageHeader = () => {
     return (
         <header className="flex justify-between items-center px-6 py-4 border-b border-gray-200 relative">
             <div className="flex items-center">
-                <img src="/src/assets/meetix-logo.png" alt="" className="h-10 w-15"/>
+                <img src="/meetix-logo.png" alt="" className="h-10 w-15"/>
                 <span className="ml-2 text-xl font-semibold tracking-tight text-white">Meetix</span>
 
-                
+
             </div>
 
             {/* Desktop Nav */}
