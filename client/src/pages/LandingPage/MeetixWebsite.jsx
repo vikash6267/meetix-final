@@ -100,14 +100,14 @@ const MeetixWebsite = () => {
             built for modern teams, educators, creators, and enterprises. Say
             goodbye to time limits, laggy calls, and confusing interfaces.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6 lg:mb-8">
+          {/* <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6 lg:mb-8">
             <button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-6 lg:px-8 py-3 lg:py-4 rounded-xl text-base lg:text-lg font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
               Start Free Trial
             </button>
             <button className="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 px-6 lg:px-8 py-3 lg:py-4 rounded-xl text-base lg:text-lg font-semibold transition-all hover:border-purple-500">
               Watch Demo
             </button>
-          </div>
+          </div> */}
 
           {/* Dashboard Preview */}
           <div className="bg-gray-800 rounded-3xl shadow-2xl border border-gray-700 overflow-hidden mb-10 max-w-7xl mx-auto">
@@ -332,9 +332,9 @@ const MeetixWebsite = () => {
                   {features[activeFeature].detailedDescription}
                 </p>
 
-                <button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+                {/* <button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
                   Learn More
-                </button>
+                </button> */}
               </div>
 
               {/* Feature Visual - iMac Desktop */}
