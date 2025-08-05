@@ -116,7 +116,7 @@ class Transcription {
             };
             async function translateText(text, targetLang = 'en') {
                 try {
-                    const response = await fetch('https://localhost:3010/api/v1/user/translate-text', {
+                    const response = await fetch('https://meetix.mahitechnocrafts.in/api/v1/user/translate-text', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ text, targetLang }),
