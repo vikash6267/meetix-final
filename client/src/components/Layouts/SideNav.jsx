@@ -54,8 +54,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const user = storedUser ? JSON.parse(storedUser) : null;
   return (
     <div
-      className={`fixed top-0 left-0 bg-[#191c1e] text-white w-72 h-screen p-6 overflow-y-auto z-50 transform transition-all duration-300 ease-in-out shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:w-64 hide-scrollbar`}
-    >
+  className={`fixed top-0 left-0 bg-[#191c1e] text-white w-72 h-screen p-6 
+              overflow-y-auto z-50 transform transition-all duration-300 ease-in-out 
+              shadow-2xl relative ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+              md:relative md:translate-x-0 md:w-64 hide-scrollbar`}
+>
+
       {/* Close Button (Mobile) */}
       <div className="md:hidden absolute top-4 right-4">
         <button
@@ -407,15 +411,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </button>
       </div>
 
-     <div className="flex w-full items-center justify-center py">
-      <Link
-        to="/setting"
-        className="flex items-center gap-2 px-2 py-2 bg-white shadow-lg border border-gray-200 rounded-full text-gray-800 hover:bg-gray-200 transition-all duration-300"
-      >
-        <Settings className="w-5 h-5" />
-        <span className="font-medium">Setting</span>
-      </Link>
-    </div>
+    {/* Top-right Settings Button */}
+{/* <div className="absolute top-4 right-4 md:right-6">
+  <Link
+    to="/setting"
+    className="flex items-center gap-2 px-3 py-2 bg-white shadow-lg border border-gray-200 rounded-full text-gray-800 hover:bg-gray-200 transition-all duration-300"
+  >
+    <Settings className="w-5 h-5" />
+    <span className="font-medium">Setting</span>
+  </Link>
+</div> */}
+
 
       {/* Bottom Decoration */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-400 to-transparent"></div>

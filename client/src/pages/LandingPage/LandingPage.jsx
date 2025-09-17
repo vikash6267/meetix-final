@@ -584,7 +584,7 @@ function LandingPage() {
 
               {/* Book a Demo Button */}
               <Link
-                to={'/book-demo'}
+                to={'/room'}
                 className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 text-white py-3 px-8 rounded-md text-xl font-medium shadow-lg transform hover:scale-105 transition duration-300"
               >
                 Book a Demo
