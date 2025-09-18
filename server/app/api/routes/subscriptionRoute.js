@@ -120,6 +120,7 @@ router.post("/webhook", async (req, res) => {
 // Called from UI on subscription button click
 router.post("/initiate-subscription", async (req, res) => {
   const { userId, email, subscriptionId, whopPlanId } = req.body;
+console.log(userId, email, subscriptionId, whopPlanId)
 
   if (!userId || !email || !subscriptionId || !whopPlanId) {
     return res.status(400).json({ message: "Missing fields" });

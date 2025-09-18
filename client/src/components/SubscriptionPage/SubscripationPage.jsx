@@ -18,6 +18,7 @@ import {
 import Sidebar from '../Layouts/SideNav';
 import Header from '../Layouts/SidebarHeader';
 import AllSubscriptions from '../common/AllSubscription';
+import { toast } from "react-toastify"
 
 const SubscriptionPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -68,50 +69,95 @@ const SubscriptionPage = () => {
   const storedUser = localStorage.getItem('user');
   const user = storedUser ? JSON.parse(storedUser) : null;
 
-  const handleSubscribe = async (plan) => {
-    if (!user?.email) {
-      toast.error('User email not found. Please log in again.');
-      return;
-    }
+//   const handleSubscribe = async (plan) => {
+//     if (!user?.email) {
+//       toast.error('User email not found. Please log in again.');
+//       return;
+//     }
+// console.log(plan?.service?.whopPlanId)
+//     setLoading(true);
 
-    setLoading(true);
+//     try {
+//       console.log('📦 Creating subscription for plan:', plan);
 
-    try {
-      console.log('📦 Creating subscription for plan:', plan);
+//       const response = await axios.post(
+//         'https://meetix.mahitechnocrafts.in/api/v1/subscription/create',
+//         {
+//           subscriptionId: plan._id,
+//           redirectUrl: `https://www.mahitechnocrafts.in/payment-success?subscriptionId=${plan._id}`,
+//           metadata: {
+//             email: user.email,
+//             userId: user.id || user._id,
+//             planType: plan.type,
+//           },
+//         },
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//             'Content-Type': 'application/json',
+//           },
+//         },
+//       );
 
-      const response = await axios.post(
-        'https://meetix.mahitechnocrafts.in/api/v1/subscription/create',
-        {
-          subscriptionId: plan._id,
-          redirectUrl: `https://www.mahitechnocrafts.in/payment-success?subscriptionId=${plan._id}`,
-          metadata: {
-            email: user.email,
-            userId: user.id || user._id,
-            planType: plan.type,
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
+//       console.log('✅ Subscription creation response:', response.data);
 
-      console.log('✅ Subscription creation response:', response.data);
+//       if (response.data.redirectUrl) {
+//         window.location.href = response.data.redirectUrl; // 🔁 Redirect to Whop
+//       } else {
+//         toast.error('❌ Failed to start checkout - no redirect URL received');
+//       }
+//     } catch (error) {
+//       console.error('❌ Subscription error:', error);
+//       toast.error(error.response?.data?.message || 'Failed to start checkout');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-      if (response.data.redirectUrl) {
-        window.location.href = response.data.redirectUrl; // 🔁 Redirect to Whop
-      } else {
-        toast.error('❌ Failed to start checkout - no redirect URL received');
+
+
+const handleSubscribe = async (plan) => {
+  if (!user?.email) {
+    toast.error("User email not found. Please log in again.");
+    return;
+  }
+
+  setLoading(true);
+console.log(plan)
+  try {
+    console.log("📤 Initiating temporary subscription...");
+
+    // Step 1: Call /initiate-subscription API
+    await axios.post(
+      "https://meetix.mahitechnocrafts.in/api/v1/subscription/initiate-subscription",
+      {
+        subscriptionId: plan?.service?._id,
+        userId: user?._id,
+        whopPlanId: plan?.service?.whopPlanId,
+        email: user.email
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
       }
-    } catch (error) {
-      console.error('❌ Subscription error:', error);
-      toast.error(error.response?.data?.message || 'Failed to start checkout');
-    } finally {
-      setLoading(false);
-    }
-  };
+    );
+
+    console.log("✅ Temp subscription created.");
+
+    // ✅ Step 2: Redirect to Whop checkout with metadata
+    const whopRedirectUrl = `${plan?.service?.whopPlanId}?metadata[email]=${encodeURIComponent(user.email)}&metadata[user_id]=${user?._id}`;
+
+    window.location.href = whopRedirectUrl;
+  } catch (error) {
+    console.error("❌ Subscription error:", error);
+    toast.error(error.response?.data?.message || "Failed to start checkout");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const getStatusBadge = (isActive) => (
     <span
