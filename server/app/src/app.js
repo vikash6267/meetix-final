@@ -2136,14 +2136,25 @@ app.post("/save-silent-recording", upload.single("audio"), async (req, res) => {
 
             room.removePeer(socket.id);
 
-   if (room.getPeersCount() == 1) {
-                io.to(socket.room_id).emit("silentRecordingCommand", {
-                    action: "stop",
-                    roomId: socket.room_id,
-                    purpose: "summary_generation"
-                });
-                console.log("🛑 Silent recording STOP – only 1 peer left in room:", socket.room_id);
-            }
+ if (room.getPeersCount() === 0) {
+    console.log("🔴 Last peer disconnected. Starting background process for:", socket.room_id);
+
+    // backend process async call
+    (async () => {
+        try {
+            await processSilentRecording(socket.room_id); // ⬅️ तेरा function
+            console.log("✅ Silent recording processed successfully for:", socket.room_id);
+        } catch (err) {
+            console.error("❌ Error in silent recording process:", err);
+        }
+    })();
+
+    // अब room cleanup safe है
+    stopRTMPActiveStreams(isPresenter, room);
+    roomList.delete(socket.room_id);
+    delete presenters[socket.room_id];
+}
+
             if (room.getPeersCount() === 0) {
                 //
                 stopRTMPActiveStreams(isPresenter, room);
